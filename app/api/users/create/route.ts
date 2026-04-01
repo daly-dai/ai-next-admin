@@ -1,30 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { verifyToken, hashPassword } from '@/lib/auth';
+import { authenticateRequest, checkRole } from '@/lib/middleware';
+import { hashPassword } from '@/lib/auth';
 
 // 创建用户
 export async function POST(request: NextRequest) {
   try {
-    // 验证 token
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { success: false, message: '未认证' },
-        { status: 401 }
-      );
+    // 使用统一的认证中间件
+    const authResult = authenticateRequest(request);
+    
+    if (!authResult.success) {
+      return authResult.response;
     }
-
-    const token = authHeader.split(' ')[1];
-    const user = verifyToken(token);
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: '令牌无效' },
-        { status: 401 }
-      );
-    }
+    
+    const user = authResult.user;
 
     // 检查权限
-    if (user.role !== 'admin') {
+    if (!checkRole(user, ['admin'])) {
       return NextResponse.json(
         { success: false, message: '无权限' },
         { status: 403 }

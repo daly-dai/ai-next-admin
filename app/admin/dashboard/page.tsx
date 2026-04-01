@@ -17,6 +17,7 @@ import {
   EyeOutlined,
   TrophyOutlined,
 } from "@ant-design/icons";
+import { statsApi, userApi, User } from "@/lib/services";
 
 const { Title } = Typography;
 
@@ -26,7 +27,7 @@ interface StatsData {
     articles: number;
     views: number;
   };
-  recentUsers: any[];
+  recentUsers: User[];
   popularArticles: any[];
 }
 
@@ -40,17 +41,10 @@ export default function DashboardPage() {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/api/stats", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const data = await statsApi.getStats();
 
-      const data = await response.json();
-
-      if (data.success) {
-        setStats(data.data);
+      if (data.success && data.data) {
+        setStats(data.data as StatsData);
       }
     } catch (error) {
       console.error("获取统计数据失败:", error);

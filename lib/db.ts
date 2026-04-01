@@ -39,6 +39,11 @@ export async function testConnection() {
 
 // 执行查询的辅助函数
 export async function query(sql: string, params?: any[]) {
-  const [rows] = await getPool().execute(sql, params);
-  return rows;
+  const connection = await getPool().getConnection();
+  try {
+    const [rows] = await connection.execute(sql, params);
+    return rows;
+  } finally {
+    connection.release();
+  }
 }

@@ -51,11 +51,6 @@ export default function AdminLayout({
   const [collapsed, setCollapsed] = useState(false);
   const [user, setUser] = useState<any>(null);
 
-  // 如果是公开页面（如登录页），直接渲染 children，不使用布局
-  if (isPublicPath(pathname)) {
-    return children;
-  }
-
   useEffect(() => {
     // 检查登录状态
     const token = localStorage.getItem("token");
@@ -91,6 +86,11 @@ export default function AdminLayout({
       onClick: handleLogout,
     },
   ];
+
+  // 如果是公开页面（如登录页），直接渲染 children，不使用布局
+  if (isPublicPath(pathname)) {
+    return children;
+  }
 
   if (!user) {
     return null;
