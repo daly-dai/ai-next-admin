@@ -117,11 +117,7 @@ export default function DashboardPage() {
               title="总用户数"
               value={stats.overview.users}
               prefix={<UserOutlined />}
-              styles={{
-                content: {
-                  color: "#3f8600",
-                },
-              }}
+              valueStyle={{ color: "#3f8600" }}
             />
           </Card>
         </Col>
@@ -131,11 +127,7 @@ export default function DashboardPage() {
               title="文章总数"
               value={stats.overview.articles}
               prefix={<FileTextOutlined />}
-              styles={{
-                content: {
-                  color: "#1890ff",
-                },
-              }}
+              valueStyle={{ color: "#1890ff" }}
             />
           </Card>
         </Col>
@@ -145,11 +137,7 @@ export default function DashboardPage() {
               title="总浏览量"
               value={stats.overview.views}
               prefix={<EyeOutlined />}
-              styles={{
-                content: {
-                  color: "#cf1322",
-                },
-              }}
+              valueStyle={{ color: "#cf1322" }}
             />
           </Card>
         </Col>
